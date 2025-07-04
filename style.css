@@ -1,0 +1,186 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  font-family: 'Roboto', sans-serif;
+  background: #f5f5f5;
+  display: flex;
+  flex-direction: column;
+      z-index: 1;
+}
+
+main {
+  flex: 1;
+  display: block; /* Or keep it as block if you don't need flex inside */
+}
+
+.top-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  background-color: #ABA19B;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  box-sizing: border-box;
+}
+
+.left-controls {
+  display: flex;
+  align-items: center;
+}
+
+
+.logo {
+  font-family: 'Roboto Slab', serif;
+  font-size: 2rem;
+  font-weight: 400;
+  color: rgb(0, 0, 0);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.logo:hover {
+  color: white;
+  text-decoration: none;
+}
+.bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2rem; /* or your desired height */
+  font-size: 1rem;
+  background: #000;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* stays on top */
+}
+.bottom-bar a {
+      color: white;
+      text-decoration: none;
+      margin: 0 0.5rem;
+    }
+.bottom-bar a:hover {
+      text-decoration: underline;
+    }
+
+.search-icon {
+  font-size: 2.5rem;
+  cursor: pointer;
+  color: black;
+}
+
+.search-icon:hover {
+  color: #ffffff;
+}
+
+.right-controls {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
+
+.kontakt-button {
+  background-color: black;
+  color: white;
+  border: none;
+  border-radius: 999px;
+  padding: 0.5rem 5ch;
+  font-weight: bold;
+  font-size: 1rem;
+  cursor: pointer;
+  font-family: 'Roboto Slab', serif;
+  text-decoration: none;
+  transition: background 0.3s ease;
+}
+
+.kontakt-button:hover {
+  background-color: #333;
+}
+
+.custom-dropdown {
+  position: relative;
+  font-size: 1rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.selected-option {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  font-weight: 400; /* use regular font weight */
+  padding-right: 0.6em;  /* space for arrow */
+  background: transparent;
+  color: #222;
+  border: none;
+  border-radius: 0;
+}
+
+.selected-option::after {
+  content: '▾';
+  position: absolute;
+  right: 0.1em;    /* align arrow’s right edge slightly inside */
+  font-size: 0.6em;
+  color: #222;
+  user-select: none;
+  pointer-events: none;
+  top: 50%;
+  transform: translateY(-50%);
+  margin-left: 0;  /* remove margin */
+}
+
+
+strong {
+  font-weight: 700;
+  letter-spacing: -0.02em; /* tweak this value as needed */
+}
+
+  .back-icon {
+    height: 1.5rem;
+    cursor: pointer;
+    filter: invert(0);
+    transition: filter 0.3s ease;
+  }
+  .back-icon:hover {
+    filter: invert(1);
+  }
+.top-bar,
+.tool-buttons,
+.bottom-bar {
+  position: relative;
+  z-index: 1;
+}
+        h1 {
+      font-family: 'Roboto Slab', serif;
+      font-size: 3rem;
+    }      
+      h2 {
+      font-family: 'Roboto Slab', sans-serif;
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    p {
+      font-family: 'Roboto', sans-serif;
+      font-size: 1.3rem;
+      line-height: 2rem;
+    }
+
+    ul {
+      font-size: 1.3rem;
+      line-height: 2;
+      color: #333;
+      margin-bottom: 1.5rem;
+    }

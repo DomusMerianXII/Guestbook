@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Gästebuch – XII</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+<style>
+  
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+    padding: 2rem;
+  }
+  .entry {
+    position: relative;
+    background: white;
+    border-radius: 1rem;
+    box-shadow: 0 0 8px rgba(0,0,0,0.1);
+    overflow: hidden;
+  }
+  .entry img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 1rem;
+  }
+  .delete-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: transparent;
+    border: none;
+    color: white;
+    padding: 0;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background 0.3s ease;
+  }
+  .delete-btn img {
+    width: 24px;
+    height: auto;
+  }
+  /* Overlay styles */
+  #imageOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.5); /* black with low opacity */
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  #imageContainer {
+    background: white;       /* white background behind image */
+    padding: 1rem;
+    border-radius: 1rem;
+    max-width: 90vw;
+    max-height: 90vh;
+    box-shadow: 0 0 15px rgba(255,255,255,0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  #imageOverlay img {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 1rem;
+    display: block;
+  }
+a {font-size: 2rem;
+  }
+    .back-icon {
+    height: 1.5rem;
+    cursor: pointer;
+    filter: invert(0);
+    transition: filter 0.3s ease;
+    padding-top: 0.4rem;
+    padding-bottom: 0.4rem;
+  }
+  .back-icon:hover {
+    filter: invert(1);
+  }
+</style>
+</head>
+<body>
+
+  <header>
+    <div class="top-bar">
+  <div class="left-controls">
+    <img src="https://cdn-icons-png.flaticon.com/128/271/271220.png" alt="Zurück" class="back-icon" onclick="history.back()" />
+  </div>
+      <div class="right-controls">
+        <div class="custom-dropdown">
+    </div>
+  </header>
+
+<main>
+  <div class="gallery-grid" id="gallery"></div>
+</main>
+
+<!-- Overlay -->
+<div id="imageOverlay" onclick="closeOverlay(event)">
+  <div id="imageContainer">
+    <img id="overlayImage" src="" alt="Großansicht" />
+  </div>
+</div>
+
+<footer class="bottom-bar">
+  <a>WOW!</a>
+</footer>
+
+<script>
+  function loadGallery() {
+    const gallery = document.getElementById('gallery');
+    gallery.innerHTML = '';
+    const entries = JSON.parse(localStorage.getItem('gaestebuchEntries') || '[]');
+    if (entries.length === 0) {
+      gallery.innerHTML = '<p>Keine Einträge gefunden.</p>';
+      return;
+    }
+    entries.forEach((dataURL, index) => {
+      const entryDiv = document.createElement('div');
+      entryDiv.className = 'entry';
+      const img = document.createElement('img');
+      img.src = dataURL;
+      img.alt = `Gästebucheintrag ${index + 1}`;
+      img.addEventListener('click', () => {
+        showOverlay(dataURL);
+      });
+      const deleteBtn = document.createElement('button');
+      deleteBtn.className = 'delete-btn';
+      deleteBtn.title = 'Eintrag löschen';
+      deleteBtn.innerHTML = '<img src="https://cdn-icons-png.flaticon.com/128/1828/1828778.png" alt="Löschen" />';
+      deleteBtn.onclick = (e) => {
+        e.stopPropagation();
+        if (confirm('Möchtest du diesen Eintrag wirklich löschen?')) {
+          deleteEntry(index);
+        }
+      };
+      entryDiv.appendChild(img);
+      entryDiv.appendChild(deleteBtn);
+      gallery.appendChild(entryDiv);
+    });
+  }
+
+  function deleteEntry(index) {
+    let entries = JSON.parse(localStorage.getItem('gaestebuchEntries') || '[]');
+    entries.splice(index, 1);
+    localStorage.setItem('gaestebuchEntries', JSON.stringify(entries));
+    loadGallery();
+  }
+
+  function showOverlay(src) {
+    const overlay = document.getElementById('imageOverlay');
+    const overlayImg = document.getElementById('overlayImage');
+    overlayImg.src = src;
+    overlay.style.display = 'flex';
+  }
+
+  function closeOverlay(e) {
+    if (e.target.id === 'overlayImage') return; // Prevent closing when clicking on the image itself
+    const overlay = document.getElementById('imageOverlay');
+    overlay.style.display = 'none';
+  }
+
+  document.addEventListener('DOMContentLoaded', loadGallery);
+</script>
+
+</body>
+</html>

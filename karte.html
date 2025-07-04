@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Karte – XII</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <style>
+    #map {
+      flex: 1;
+      width: 100%;
+      position: relative;
+    }
+
+    #place-selector {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      z-index: 1000;
+      background: weiß;
+      color: #222;
+      border-radius: 999px;
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      font-family: 'Roboto Slab', serif;
+      align-content: center;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      border: none;
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      cursor: pointer;
+    }
+
+    strong {
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .leaflet-popup-content-wrapper {
+      background: weiß !important;
+      font-size: 1rem !important;
+      max-width: 1200px !important;
+      padding: 0.1rem !important;
+      word-wrap: break-word;
+      box-sizing: border-box;
+    }
+
+    .leaflet-popup-content {
+      line-height: 1.4;
+      background: weiß !important;
+    }
+
+    .leaflet-popup-close-button {
+      font-size: 1rem !important;
+      line-height: 1rem;
+      width: 2rem !important;
+      height: 2rem !important;
+      top: 0.1rem !important;
+      right: 0.05rem !important;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="top-bar">
+      <div class="left-controls">
+        <img src="https://cdn-icons-png.flaticon.com/128/271/271220.png" alt="Zurück" class="back-icon" onclick="history.back()" />
+      </div>
+      <div class="right-controls">
+        <a href="kontakt.html" class="kontakt-button">Kontakt</a>
+      </div>
+    </div>
+  </header>
+
+  <div id="map">
+    <select id="place-selector" title="Zeige auf der Karte">
+      <option value="supermarket" selected>Supermärkte</option>
+      <option value="cafe">Cafés</option>
+      <option value="pharmacy">Apotheken</option>
+      <option value="restaurant">Restaurants</option>
+      <option value="bars">Bars & Pubs</option>
+      <option value="bus_station">Bus & Bahn</option>
+      <option value="hospital">Krankenhäuser</option>
+      <option value="favorites">Lieblingsplätze</option>
+    </select>
+  </div>
+
+  <footer>
+    <div class="bottom-bar">
+      <a href="impressum.html">Impressum</a> | <a href="datenschutz.html">Datenschutz</a>
+    </div>
+  </footer>
+
+  <script>
+    let routeControl;
+    const LOCATION = [49.7608, 6.6481];
+    const map = L.map('map').setView(LOCATION, 16);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap'
+    }).addTo(map);
+
+    const markersLayer = L.layerGroup().addTo(map);
+
+    const myLocationIcon = L.icon({
+      iconUrl: 'https://cdn-icons-png.flaticon.com/512/684/684908.png',
+      iconSize: [80, 80],
+      iconAnchor: [40, 80],
+      popupAnchor: [0, -80]
+    });
+
+    L.marker(LOCATION, { icon: myLocationIcon }).addTo(map).bindPopup("Merianstraße 12").openPopup();
+
+    const icons = {
+      supermarket: L.icon({ iconUrl: 'https://cdn-icons-png.flaticon.com/512/3144/3144456.png', iconSize: [80, 80], iconAnchor: [40, 80], popupAnchor: [0, -80] }),
+      cafe: L.icon({ iconUrl: 'https://cdn3.iconfinder.com/data/icons/city-50/64/icon-Eating_placescafe-128.png', iconSize: [80, 80], iconAnchor: [40, 80], popupAnchor: [0, -80] }),
+      restaurant: L.icon({ iconUrl: 'https://cdn3.iconfinder.com/data/icons/streamline-icon-set-free-pack/48/Streamline-94-128.png', iconSize: [80, 80], iconAnchor: [40, 80], popupAnchor: [0, -80] }),
+      pharmacy: L.icon({ iconUrl: 'https://cdn0.iconfinder.com/data/icons/medic-outline/32/Medical_Pill-128.png', iconSize: [80, 80], iconAnchor: [40, 80], popupAnchor: [0, -80] }),
+      bars: L.icon({ iconUrl: 'https://cdn1.iconfinder.com/data/icons/ui-essential-17/32/UI_Essential_Outline_2_essential-app-ui-drink-food-128.png', iconSize: [80, 80], iconAnchor: [40, 80], popupAnchor: [0, -80] }),
+      bus_station: L.icon({
+        iconUrl: 'https://cdn-icons-png.flaticon.com/128/58/58893.png',
+        iconSize: [80, 80],
+        iconAnchor: [40, 80],
+        popupAnchor: [0, -80]
+      }),
+      favorites: L.icon({ iconUrl: 'https://cdn-icons-png.flaticon.com/128/4675/4675168.png', iconSize: [80, 80], iconAnchor: [40, 80], popupAnchor: [0, -80] }),
+      hospital: L.icon({ iconUrl: 'https://cdn-icons-png.flaticon.com/128/819/819235.png', iconSize: [80, 80], iconAnchor: [40, 80], popupAnchor: [0, -80] })
+    };
+
+    function formatAddress(tags) {
+      const street = tags['addr:street'] || '';
+      const house = tags['addr:housenumber'] || '';
+      const postcode = tags['addr:postcode'] || '';
+      const city = tags['addr:city'] || '';
+      const line1 = (street || house) ? `${street} ${house}`.trim() : '';
+      const line2 = (postcode || city) ? `${postcode} ${city}`.trim() : '';
+      return (line1 || line2) ? `<br>${line1}<br>${line2}` : '';
+    }
+
+    const favoritePlaces = [
+      {
+        name: "Gut Avelsbach",
+        coords: [49.73385, 6.65595],
+        description: "Riesling direkt vom Winzer, Garten & Bluesmusik.",
+        link: "karte.html#gutavelsbach",
+        website: "https://gutavelsbach.de"
+      },
+      {
+        name: "Parfümerie Lücke",
+        coords: [49.75625, 6.64187],
+        description: "Nischenparfüms & ausgewählte Kosmetik.",
+        link: "karte.html#parfuemerie-luecke",
+        website: "https://luecke-cosmetic.de"
+      },
+      {
+        name: "Brasserie SIM",
+        coords: [49.75865, 6.64315],
+        description: "Französisch-deutsche Küche nahe Porta Nigra.",
+        link: "karte.html#brasserie-sim",
+        website: "https://sim-trier.de"
+      },
+      {
+        name: "Früh bis spät",
+        coords: [49.75712, 6.64047],
+        description: "Kölsch-Brauhaus & Steaks bis 750g.",
+        link: "karte.html#frueh-bis-spaet",
+        website: "https://frueh-bis-spaet-trier.de"
+      },
+      {
+        name: "Weinstand Hauptmarkt",
+        coords: [49.75641, 6.64120],
+        description: "Mosel-, Saar- und Ruwer-Weine – mitten auf dem Platz.",
+        link: "karte.html#weinstand",
+        website: "https://www.trier-info.de/weinerlebnisse/weinstand-trier"
+      },
+      {
+        name: "Flietenfranz",
+        coords: [49.75794, 6.63635],
+        description: "Knusprige Chicken Wings & BBQ-Atmosphäre.",
+        link: "karte.html#flietenfranz",
+        website: "https://flietenfranz.de"
+      },
+      {
+        name: "Petrisberg",
+        coords: [49.74613, 6.66711],
+        description: "Sonnenuntergang mit Blick über Trier.",
+        link: "karte.html#petrisberg",
+        website: "https://www.tripadvisor.de/ShowUserReviews-g187394-d7906129-r476760171-Petrisberg-Trier_Rhineland_Palatinate.html"
+      },
+      {
+        name: "Mariensäule",
+        coords: [49.75550, 6.61932],
+        description: "Aussichtspunkt mit Blick auf Mosel & Stadt.",
+        link: "karte.html#mariensaeule",
+        website: "https://www.trier-info.de/sehenswuerdigkeiten/mariensaeule"
+      }
+    ];
+
+    function fetchPlaces(type) {
+      markersLayer.clearLayers();
+
+      const bbox = [49.74, 6.60, 49.80, 6.70];
+      let query = '';
+
+      if (type === 'favorites') {
+        favoritePlaces.forEach(place => {
+          const lat = place.coords[0];
+          const lon = place.coords[1];
+          const icon = icons.favorites;
+
+          const marker = L.marker([lat, lon], { icon }).addTo(markersLayer);
+
+          marker.on('click', () => {
+            const apiKey = '5b3ce3597851110001cf6248fde69deb954c4272bbc78f378033bdff';
+            if (routeControl) {
+              map.removeControl(routeControl);
+              routeControl = null;
+            }
+
+            marker.bindPopup('<div style="background:white; padding:1rem; border-radius:1rem;">Route wird berechnet...</div>').openPopup();
+
+            const start = [LOCATION[1], LOCATION[0]];
+            const end = [lon, lat];
+
+            const profiles = [
+              { key: 'foot-walking', label: 'Zu Fuß' },
+              { key: 'cycling-regular', label: 'Mit dem Rad' },
+              { key: 'driving-car', label: 'Mit dem Auto' }
+            ];
+
+            Promise.all(profiles.map(profile => {
+              return fetch(`https://api.openrouteservice.org/v2/directions/${profile.key}/geojson`, {
+                method: 'POST',
+                headers: {
+                  'Authorization': apiKey,
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ coordinates: [start, end] })
+              })
+                .then(res => res.ok ? res.json() : Promise.reject(`Status ${res.status}`))
+                .then(routeData => ({
+                  label: profile.label,
+                  mins: Math.round(routeData.features[0].properties.summary.duration / 60),
+                  geojson: routeData
+                }))
+                .catch(() => ({ label: profile.label, mins: null, geojson: null }));
+            }))
+              .then(results => {
+                const validResults = results.filter(r => r.mins !== null);
+
+                if (validResults.length === 0) {
+                  marker.setPopupContent(`
+                    <div style="background:white; padding:1rem; border-radius:1rem;">
+                      <a href="${place.website || place.link}" target="_blank" rel="noopener noreferrer"><strong>${place.name}</strong></a><br>
+                      ${place.description}<br>
+                      <em>Bitte lade die Seite neu und gib mir ein paar Sekunden.</em>
+                    </div>
+                  `);
+                  marker.openPopup();
+                  return;
+                }
+
+                const fastest = validResults.reduce((a, b) => a.mins < b.mins ? a : b);
+
+                routeControl = L.geoJSON(fastest.geojson, {
+                  style: { color: 'blue', weight: 5 }
+                }).addTo(map);
+
+                marker.setPopupContent(`
+                  <div style="background:white; padding:1rem; border-radius:1rem;">
+                    <a href="${place.website || place.link}" target="_blank" rel="noopener noreferrer"><strong>${place.name}</strong></a><br>
+                    ${place.description}<br>
+                    ${results.map(r => `<em>⏱ ${r.label}: ${r.mins !== null ? r.mins + ' Min' : '-'}</em>`).join('<br>')}
+                  </div>
+                `);
+                marker.openPopup();
+              })
+              .catch(() => {
+                marker.setPopupContent(`<div style="background:white; padding:1rem; border-radius:1rem;">
+                  <strong>${place.name}</strong><br>
+                  Fehler bei der Routenberechnung.
+                </div>`);
+                marker.openPopup();
+              });
+          });
+        });
+        return; // Wichtig! Überspringe Overpass-Abfrage für Lieblingsplätze
+      }
+
+      // Overpass-Abfragen für andere Kategorien
+      if (type === 'hospital') {
+        query = `
+          [out:json][timeout:25];
+          (
+            node["amenity"="hospital"](${bbox[0]},${bbox[1]},${bbox[2]},${bbox[3]});
+            way["amenity"="hospital"](${bbox[0]},${bbox[1]},${bbox[2]},${bbox[3]});
+            relation["amenity"="hospital"](${bbox[0]},${bbox[1]},${bbox[2]},${bbox[3]});
+          );
+          out center tags;
+        `;
+      } else if (type === 'bars') {
+        query = `
+          [out:json][timeout:25];(
+            node["amenity"~"bar|pub"](${bbox[0]},${bbox[1]},${bbox[2]},${bbox[3]});
+            way["amenity"~"bar|pub"](${bbox[0]},${bbox[1]},${bbox[2]},${bbox[3]});
+            relation["amenity"~"bar|pub"](${bbox[0]},${bbox[1]},${bbox[2]},${bbox[3]});
+          );out center tags;`;
+      } else if (type === 'restaurant') {
+        query = `
+          [out:json][timeout:25];(
+            node["amenity"~"restaurant|fast_food"](${bbox[0]},${bbox[1]},${bbox[2]},${bbox[3]});
+            way["amenity"~"restaurant|fast_food"](${bbox[0]},${bbox[1]},${bbox[2]},${bbox[3]});
+            relation["amenity"~"restaurant|fast_food"](${bbox[0]},${bbox[1]},${bbox[2]},${bbox[3]});
+          );out center tags;`;
+      } else if (type === 'supermarket') {
+        query = `
+          [out:json][timeout:25];(
+            node["shop"="supermarket"](${bbox[0]},${bbox[1]},${bbox[2]},${bbox[3]});
+            way["shop"="supermarket"](${bbox[0]},${bbox[1]},${bbox[2]},${bbox[3]});
+            relation["shop"="supermarket"](${bbox[0]},${bbox[1]},${bbox[2]},${bbox[3]});
+          );out center tags;`;
+      } else if (type === 'bus_station') {
+        query = `
+          [out:json][timeout:25];(
+            node["highway"="bus_stop"](${bbox[0]},${bbox[1]},${bbox[2]},${bbox[3]});
+            way["highway"="bus_stop"](${bbox[0]},${bbox[1]},${bbox[2]},${bbox[3]});
+            relation["highway"="bus_stop"](${bbox[0]},${bbox[1]},${bbox[2]},${bbox[3]});
+            node["railway"="station"](${bbox[0]},${bbox[1]},${bbox[2]},${bbox[3]});
+            way["railway"="station"](${bbox[0]},${bbox[1]},${bbox[2]},${bbox[3]});
+            relation["railway"="station"](${bbox[0]},${bbox[1]},${bbox[2]},${bbox[3]});
+            node["public_transport"="station"](${bbox[0]},${bbox[1]},${bbox[2]},${bbox[3]});
+            way["public_transport"="station"](${bbox[0]},${bbox[1]},${bbox[2]},${bbox[3]});
+            relation["public_transport"="station"](${bbox[0]},${bbox[1]},${bbox[2]},${bbox[3]});
+          );out center tags;
+        `;
+      } else {
+        query = `
+          [out:json][timeout:25];(
+            node["amenity"="${type}"](${bbox[0]},${bbox[1]},${bbox[2]},${bbox[3]});
+            way["amenity"="${type}"](${bbox[0]},${bbox[1]},${bbox[2]},${bbox[3]});
+            relation["amenity"="${type}"](${bbox[0]},${bbox[1]},${bbox[2]},${bbox[3]});
+          );out center tags;`;
+      }
+
+      fetch("https://overpass-api.de/api/interpreter", { method: "POST", body: query })
+        .then(res => res.json())
+        .then(data => {
+          if (!data.elements || data.elements.length === 0) return;
+          data.elements.forEach(el => {
+            const lat = el.lat || el.center?.lat;
+            const lon = el.lon || el.center?.lon;
+            if (!lat || !lon) return;
+            const tags = el.tags || {};
+            const name = tags.name || "Unbekannt";
+            const address = formatAddress(tags);
+            const hours = tags.opening_hours ? `<br><em>${tags.opening_hours}</em>` : "";
+            const icon = icons[type] || icons.bars;
+            const marker = L.marker([lat, lon], { icon }).addTo(markersLayer);
+
+            marker.on('click', () => {
+              const apiKey = '5b3ce3597851110001cf6248fde69deb954c4272bbc78f378033bdff';
+              if (routeControl) {
+                map.removeControl(routeControl);
+                routeControl = null;
+              }
+
+              marker.bindPopup('<div style="background:white; padding:1rem; border-radius:1rem;">Route wird berechnet...</div>').openPopup();
+
+              const start = [LOCATION[1], LOCATION[0]]; // [lon, lat]
+              const end = [lon, lat];                   // Ziel [lon, lat]
+
+              const profiles = [
+                { key: 'foot-walking', label: 'Zu Fuß' },
+                { key: 'cycling-regular', label: 'Mit dem Rad' },
+                { key: 'driving-car', label: 'Mit dem Auto' }
+              ];
+
+              Promise.all(profiles.map(profile => {
+                return fetch(`https://api.openrouteservice.org/v2/directions/${profile.key}/geojson`, {
+                  method: 'POST',
+                  headers: {
+                    'Authorization': apiKey,
+                    'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify({ coordinates: [start, end] })
+                })
+                  .then(res => {
+                    if (!res.ok) {
+                      return Promise.reject(`Status ${res.status}`);
+                    }
+                    return res.json();
+                  })
+                  .then(routeData => ({
+                    label: profile.label,
+                    mins: Math.round(routeData.features[0].properties.summary.duration / 60),
+                    geojson: routeData
+                  }))
+                  .catch(() => ({ label: profile.label, mins: null, geojson: null }));
+              }))
+                .then(results => {
+                  const validResults = results.filter(r => r.mins !== null);
+
+                  const isStation = tags.railway === 'station' || tags.public_transport === 'station';
+                  const isBusStop = !isStation && type === 'bus_station';
+
+                  const bahnLink = 'https://www.bahn.de';
+                  const vrtLink = 'https://www.vrt-info.de/fahrplanauskunft/XSLT_TRIP_REQUEST2?language=de&itdLPxx_contractor=vrt';
+
+                  if (validResults.length === 0) {
+                    let popupHtml;
+                    if (isStation) {
+                      popupHtml = `
+                        <div style="background:white; padding:1rem; border-radius:1rem;">
+                          Bahnhof: <a href="${bahnLink}" target="_blank" rel="noopener noreferrer"><strong>${name}</strong></a>
+                          ${address}
+                          ${hours}
+                          <br>
+                          <em>Bitte lade die Seite neu und gib mir ein paar Sekunden.</em>
+                        </div>
+                      `;
+                    } else if (isBusStop) {
+                      popupHtml = `
+                        <div style="background:white; padding:1rem; border-radius:1rem;">
+                          Bushaltestelle: <a href="${vrtLink}" target="_blank" rel="noopener noreferrer"><strong>${name}</strong></a>
+                          ${address}
+                          ${hours}
+                          <br>
+                          <em>Bitte lade die Seite neu und gib mir ein paar Sekunden.</em>
+                        </div>
+                      `;
+                    } else {
+                      popupHtml = `
+                        <div style="background:white; padding:1rem; border-radius:1rem;">
+                          ${(tags.website || '').startsWith('http')
+                            ? `<a href="${tags.website}" target="_blank" rel="noopener noreferrer"><strong>${name}</strong></a>`
+                            : `<strong>${name}</strong>`}
+                          ${address}
+                          ${hours}
+                          <br>
+                          <em>Bitte lade die Seite neu und gib mir ein paar Sekunden.</em>
+                        </div>
+                      `;
+                    }
+                    marker.setPopupContent(popupHtml);
+                    marker.openPopup();
+                    return;
+                  }
+
+                  const fastest = validResults.reduce((a, b) => a.mins < b.mins ? a : b);
+
+                  routeControl = L.geoJSON(fastest.geojson, {
+                    style: { color: 'blue', weight: 5 }
+                  }).addTo(map);
+
+                  let popupHtml;
+                  if (isStation) {
+                    popupHtml = `
+                      <div style="background:white; padding:1rem; border-radius:1rem;">
+                        Bahnhof: <a href="${bahnLink}" target="_blank" rel="noopener noreferrer"><strong>${name}</strong></a>
+                        ${address}
+                        ${hours}
+                        <br>
+                        ${results.map(r => `<em>⏱ ${r.label}: ${r.mins !== null ? r.mins + ' Min' : '-'}</em>`).join('<br>')}
+                      </div>
+                    `;
+                  } else if (isBusStop) {
+                    popupHtml = `
+                      <div style="background:white; padding:1rem; border-radius:1rem;">
+                        Bushaltestelle: <a href="${vrtLink}" target="_blank" rel="noopener noreferrer"><strong>${name}</strong></a>
+                        ${address}
+                        ${hours}
+                        <br>
+                        ${results.map(r => `<em>⏱ ${r.label}: ${r.mins !== null ? r.mins + ' Min' : '-'}</em>`).join('<br>')}
+                      </div>
+                    `;
+                  } else {
+                    popupHtml = `
+                      <div style="background:white; padding:1rem; border-radius:1rem;">
+                        ${(tags.website || '').startsWith('http')
+                          ? `<a href="${tags.website}" target="_blank" rel="noopener noreferrer"><strong>${name}</strong></a>`
+                          : `<strong>${name}</strong>`}
+                        ${address}
+                        ${hours}
+                        <br>
+                        ${results.map(r => `<em>⏱ ${r.label}: ${r.mins !== null ? r.mins + ' Min' : '-'}</em>`).join('<br>')}
+                      </div>
+                    `;
+                  }
+                  marker.setPopupContent(popupHtml);
+                  marker.openPopup();
+                })
+                .catch(() => {
+                  marker.setPopupContent(`<div style="background:white; padding:1rem; border-radius:1rem;">
+                    <strong>${name}</strong><br>
+                    Fehler bei der Routenberechnung.
+                  </div>`);
+                  marker.openPopup();
+                });
+            });
+          });
+        })
+        .catch(err => console.error("Overpass API Fehler:", err));
+    }
+
+    // URL-Hash verarbeiten, um Popup für Lieblingsplatz zu öffnen
+    const hash = window.location.hash.substring(1);
+
+    if (hash) {
+      const selector = document.getElementById('place-selector');
+      selector.value = 'favorites';
+      fetchPlaces('favorites');
+
+      setTimeout(() => {
+        const place = favoritePlaces.find(p => p.link.includes(`#${hash}`));
+        if (place) {
+          map.setView(place.coords, 17);
+          markersLayer.eachLayer(marker => {
+            if (
+              marker.getLatLng().lat === place.coords[0] &&
+              marker.getLatLng().lng === place.coords[1]
+            ) {
+              marker.openPopup();
+            }
+          });
+        }
+      }, 500);
+    }
+
+    const selector = document.getElementById('place-selector');
+    selector.addEventListener('change', () => {
+      if (routeControl) {
+        map.removeControl(routeControl);
+        routeControl = null;
+      }
+      fetchPlaces(selector.value);
+    });
+    fetchPlaces(selector.value);
+  </script>
+</body>
+</html>

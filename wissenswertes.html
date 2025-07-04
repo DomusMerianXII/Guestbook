@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wissenswertes – XII</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdn-icons-png.flaticon.com/128/271/271228.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&family=Roboto+Slab&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    
+ html, body {
+   height: 100%;
+   margin: 0;
+ }
+ .page-wrapper {
+   display: flex;
+   flex-direction: column;
+   min-height: 100vh;
+ }
+
+main {
+  flex: 1 auto;
+  padding: 0rem 3rem 3rem 3rem; /* padding oben = Topbar (ca. 6rem) + Abstand */
+  overflow-y: auto;
+  background: #f5f5f5;
+  flex: 1;
+}
+
+
+    details {
+      background: white;
+      border-radius: 0.75rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      margin-bottom: 1rem;
+      padding: 1rem 1.5rem;
+    }
+
+  summary {
+  position: relative;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1.5rem;
+  outline: none;
+  list-style: none;
+  padding-left: 2rem; /* Platz für das Icon links */
+}
+
+    summary::-webkit-details-marker {
+      display: none;
+    }
+
+    summary::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1.2rem;    /* Größe des Icons */
+  height: 1.2rem;
+  background-image: url('https://cdn-icons-png.flaticon.com/128/271/271228.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  transition: transform 0.3s ease;
+}
+summary {
+  font-family: 'Roboto Slab', serif;
+  font-size: 1.5rem;
+  color: #333;
+  font-weight: 700;
+  }
+  /* Wenn Details geöffnet ist, rotiere das Icon (optional) */
+details[open] summary::before {
+  transform: translateY(-50%) rotate(90deg);
+}
+
+    details p {
+      font-family: 'Roboto', sans-serif;
+      margin: 1rem 0 0 0;
+      line-height: 2;
+      font-size: 1.3rem;
+    }
+    main details:last-of-type {
+  margin-bottom: 0;
+}
+
+  </style>
+</head>
+<body>
+  <div class="page-wrapper">
+  <!-- TOP BAR -->
+  <header>
+    <div class="top-bar">
+  <div class="left-controls">
+    <img src="https://cdn-icons-png.flaticon.com/128/271/271220.png" alt="Zurück" class="back-icon" onclick="history.back()" />
+  </div>
+      <div class="right-controls">
+        <a href="kontakt.html" class="kontakt-button">Kontakt</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main>
+ <h1>Wissenswertes von A bis Z</h1>
+
+  <details>
+    <summary>An- und Abreise</summary>
+    <p>Anreise ab 15 Uhr – der Schlüsselsafe befindet sich an der Garage im Innenhof, den Pin erhältst Du von uns vorab.<br>
+    Abreise bis 11 Uhr – bitte hinterlege den Schlüssel im Tresor.</p>
+  </details>
+
+  <details>
+    <summary>Bad</summary>
+    <p>Haartrockner im Schrank unter dem Waschbecken, frische Handtücher im Schlafzimmer. Bitte Dusche nach Nutzung abziehen und Fenster öffnen.</p>
+  </details>
+
+  <details>
+    <summary>Deine Pflicht zur Sorgfalt</summary>
+    <p>Vor dem Verlassen: Fenster öffnen (auf Kipp), Licht und Herd ausschalten.</p>
+  </details>
+
+  <details>
+    <summary>Einrichtung</summary>
+    <p>Bitte sorgfältig behandeln. Bei Schäden sprich uns an – die Haftpflichtversicherung hilft oft weiter.</p>
+  </details>
+
+  <details>
+    <summary>Erste-Hilfe-Kasten</summary>
+    <p>Im Flur neben dem Spind.</p>
+  </details>
+
+  <details>
+    <summary>Fernseher</summary>
+    <p>Im Wohnzimmer mit Kabelanschluss.</p>
+  </details>
+
+  <details>
+    <summary>Gästefragebogen</summary>
+    <p>Hilft uns, Mängel zu erkennen. „Personal“ bei booking.com bezieht sich auf unsere Kommunikation.</p>
+  </details>
+
+  <details>
+    <summary>Kohlenmonoxydmelder</summary>
+    <p>Bei Alarm: Sofort Wohnung verlassen!</p>
+  </details>
+
+  <details>
+    <summary>Küche</summary>
+    <p>Voll ausgestattet. Spültabs unter dem Waschbecken. Bitte bei Abreise sauberes Geschirr zurückstellen.</p>
+  </details>
+
+  <details>
+    <summary>Müllentsorgung</summary>
+    <p>Trennung nach Papier, Kunststoff, Glas, Restmüll. Behälter in der Küche, Tonnen im Hof.</p>
+  </details>
+
+  <details>
+    <summary>Musikboxen</summary>
+    <p>Bluetooth-Box im Bad oder via ALEXA steuerbar.</p>
+  </details>
+
+  <details>
+    <summary>Parken</summary>
+    <p>Garage im Innenhof (erste links). Keine Fremdparkplätze im Hof. Alternativ: Straße mit Parkschein (6€/Tag).</p>
+  </details>
+
+  <details>
+    <summary>Rauchen</summary>
+    <p>Nur draußen erlaubt. Nicht im Eingangsbereich. Danke!</p>
+  </details>
+
+  <details>
+    <summary>Rauchmelder</summary>
+    <p>In allen Räumen. Feuerlöscher im Flur beim Spind.</p>
+  </details>
+
+  <details>
+    <summary>Reinigung</summary>
+    <p>Staubsauger und Mittel im Spind.</p>
+  </details>
+
+  <details>
+    <summary>Schlafcouch</summary>
+    <p>Elektrisch ausfahrbar. Schalter an rechter Armlehne. Bettwäsche im Schlafzimmer.</p>
+  </details>
+
+  <details>
+    <summary>Schlafzimmer</summary>
+    <p>Betten bezogen. Abziehen optional.</p>
+  </details>
+
+  <details>
+    <summary>Schlüssel</summary>
+    <p>Im Keysafe an der ersten Garage. Bei Verlust: Schließanlage muss ersetzt werden.</p>
+  </details>
+
+  <details>
+    <summary>Spielesammlung</summary>
+    <p>Im Wohnzimmerschrank oder Couchtisch (Koffer).</p>
+  </details>
+
+  <details>
+    <summary>Ventilatoren</summary>
+    <p>Deckenventilatoren und im Sommer zusätzliche Vernebler mit Anleitung.</p>
+  </details>
+
+  <details>
+    <summary>Waschmaschine & Trockner</summary>
+    <p>Im Keller rechts. Steckdose gesichert, Schlüssel an der Garderobe. Anleitung liegt bereit.</p>
+  </details>
+
+  <details>
+    <summary>Wertgegenstände</summary>
+    <p>Keine Haftung durch den Vermieter.</p>
+  </details>
+
+  <details>
+    <summary>WLAN</summary>
+    <p><strong>Netzwerk:</strong> domusmerian<br><strong>Passwort:</strong> onemoretattoo66</p>
+  </details>
+
+  <details>
+    <summary>Zahlungsarten</summary>
+    <p>PayPal oder Überweisung.</p>
+  </details>
+
+  <details>
+    <summary>Zwischenreinigung</summary>
+    <p>Bei Buchungen ab 3 Wochen möglich – inkl. Wäschewechsel auf Wunsch.</p>
+  </details>
+  </main>
+
+  <!-- BOTTOM BAR -->
+  <footer>
+    <div class="bottom-bar">
+      <a href="impressum.html">Impressum</a> | 
+      <a href="datenschutz.html">Datenschutz</a>
+    </div>
+  </footer>
+
+  <!-- DROPDOWN SCRIPT -->
+  </div>
+</body>
+</html>

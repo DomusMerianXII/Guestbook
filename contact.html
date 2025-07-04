@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Contact & Feedback – XII</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    
+    *,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+main {
+  position: fixed;
+  left: 0;
+  right: 0;
+  padding: 4rem 2rem; /* 👈 Gleichmäßiger Rand links und rechts */
+  overflow-y: auto;
+  font-size: 1.2rem;
+  line-height: 1.6;
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  box-sizing: border-box;
+}
+    body {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+      font-family: 'Roboto', sans-serif;
+      color: #222;
+      margin: 0;
+    }
+
+
+.search-icon {
+  font-size: 2.5rem;
+  cursor: pointer;
+  color: black;
+  /* margin-left nicht mehr nötig, weil gap da ist */
+}
+
+.search-icon:hover {
+  color: white;
+}
+  
+.bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2rem; /* or your desired height */
+  font-size: 1rem;
+  background: #000;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* stays on top */
+}
+
+.bottom-bar a {
+  color: white;
+  text-decoration: none;
+  margin: 0 0.5rem;
+}
+
+.bottom-bar a:hover {
+  text-decoration: underline;
+}
+
+    p.intro {
+      line-height: 1.5;
+      margin-bottom: 2rem;
+      font-size: 1.3rem;
+      max-width: 100%;
+      text-align: left;
+    }
+
+    form {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      background: #f8f8f8;
+      padding: 1rem;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    label {
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+      display: block;
+      font-size: 1.1rem;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    textarea {
+      width: 100%;
+      padding: 0.6rem 0.8rem;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-family: inherit;
+      resize: vertical;
+    }
+    textarea {
+      min-height: 225px;
+    }
+
+    .radio-group {
+      display: flex;
+      gap: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    .radio-group label {
+      font-weight: normal;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    input[type="radio"] {
+      cursor: pointer;
+    }
+
+    .checkbox-group {
+      margin-top: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.9rem;
+      line-height: 1.2;
+    }
+    input[type="checkbox"] {
+      cursor: pointer;
+    }
+
+    a.datenschutz-link {
+      color: black;
+      text-decoration: underline;
+      font-weight: 600;
+      font-size: 1rem;
+    }
+
+    button[type="submit"] {
+      background-color: black;
+      color: white;
+      border: none;
+      border-radius: 999px;
+      padding: 0.75rem 1.75rem;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      align-self: flex-start;
+      transition: background-color 0.3s ease;
+      font-size: 1.2rem;
+    }
+    button[type="submit"]:hover {
+      background-color: #333;
+    }
+.top-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+  background-color: #ABA19B;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 1.4rem;
+  padding-bottom: 1.4rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  box-sizing: border-box;
+}
+
+    
+  </style>
+</head>
+<body>
+<header>
+  <div class="top-bar">
+    <img src="https://cdn-icons-png.flaticon.com/128/271/271220.png" alt="Zurück" class="back-icon" onclick="history.back()" />
+  </div>
+</header>
+
+<main>
+  <h1>Contact & Feedback</h1>
+  <form action="mailto:domusmerian@icloud.com" method="POST" enctype="text/plain">
+    <label>How satisfied were you with our service?</label>
+    <div class="radio-group">
+      <label><input type="radio" name="service" value="very satisfied" required /> very satisfied</label>
+      <label><input type="radio" name="service" value="satisfied" /> satisfied</label>
+      <label><input type="radio" name="service" value="not satisfied" /> not satisfied</label>
+    </div>
+
+    <label>How satisfied were you with the cleanliness?</label>
+    <div class="radio-group">
+      <label><input type="radio" name="cleanliness" value="very satisfied" required /> very satisfied</label>
+      <label><input type="radio" name="cleanliness" value="satisfied" /> satisfied</label>
+      <label><input type="radio" name="cleanliness" value="not satisfied" /> not satisfied</label>
+    </div>
+
+    <label>How satisfied were you with our value for money?</label>
+    <div class="radio-group">
+      <label><input type="radio" name="value" value="very satisfied" required /> very satisfied</label>
+      <label><input type="radio" name="value" value="satisfied" /> satisfied</label>
+      <label><input type="radio" name="value" value="not satisfied" /> not satisfied</label>
+    </div>
+
+    <label for="feedback-wish">Wishes or suggestions</label>
+    <textarea id="feedback-wish" name="wish" placeholder="Your wishes or suggestions"></textarea>
+
+    <button type="submit">Send</button>
+  </form>
+</main>
+    </form>
+  </main>
+
+  <footer class="bottom-bar">
+    <a href="imprint.html">Imprint</a> | 
+    <a href="privacy.html"> Privacy</a>
+  </footer>
+
+</body>
+</html>

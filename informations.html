@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Informations – XII</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdn-icons-png.flaticon.com/128/271/271228.png" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&family=Roboto+Slab&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    
+ html, body {
+   height: 100%;
+   margin: 0;
+ }
+ .page-wrapper {
+   display: flex;
+   flex-direction: column;
+   min-height: 100vh;
+ }
+
+main {
+  flex: 1 auto;
+  padding: 0rem 3rem 3rem 3rem; /* padding oben = Topbar (ca. 6rem) + Abstand */
+  overflow-y: auto;
+  background: #f5f5f5;
+  flex: 1;
+}
+
+
+    details {
+      background: white;
+      border-radius: 0.75rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      margin-bottom: 1rem;
+      padding: 1rem 1.5rem;
+    }
+
+  summary {
+  position: relative;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1.5rem;
+  outline: none;
+  list-style: none;
+  padding-left: 2rem; /* Platz für das Icon links */
+}
+
+    summary::-webkit-details-marker {
+      display: none;
+    }
+
+    summary::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1.2rem;    /* Größe des Icons */
+  height: 1.2rem;
+  background-image: url('https://cdn-icons-png.flaticon.com/128/271/271228.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  transition: transform 0.3s ease;
+}
+summary {
+  font-family: 'Roboto Slab', sans-serif;
+  font-size: 1.5rem;
+  color: #333;
+  font-weight: 700;
+  }
+  /* Wenn Details geöffnet ist, rotiere das Icon (optional) */
+details[open] summary::before {
+  transform: translateY(-50%) rotate(90deg);
+}
+
+    details p {
+      font-family: 'Roboto', sans-serif;
+      margin: 1rem 0 0 0;
+      line-height: 2;
+      font-size: 1.3rem;
+    }
+    main details:last-of-type {
+  margin-bottom: 0;
+}
+
+  </style>
+</head>
+<body>
+  <div class="page-wrapper">
+  <header>
+    <div class="top-bar">
+  <div class="left-controls">
+    <img src="https://cdn-icons-png.flaticon.com/128/271/271220.png" alt="Zurück" class="back-icon" onclick="history.back()" />
+  </div>
+      <div class="right-controls">
+        <a href="contact.html" class="kontakt-button">Contact</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <h1>Information from A to Z</h1>
+
+    <details><summary>Arrival & Departure</summary><p>Check-in from 3 PM – the key safe is located at the garage in the courtyard, and you’ll receive the code from us in advance.<br>Check-out by 11 AM – please return the key to the safe.</p></details>
+
+    <details><summary>Bathroom</summary><p>Hairdryer is in the cabinet under the sink, fresh towels are in the bedroom. Please wipe down the shower after use and open the window.</p></details>
+
+    <details><summary>Your Duty of Care</summary><p>Before leaving: crack windows open, switch off lights and stove.</p></details>
+
+    <details><summary>Furnishings</summary><p>Please handle everything with care. If anything is damaged, let us know – liability insurance often covers such cases.</p></details>
+
+    <details><summary>First Aid Kit</summary><p>Located in the hallway next to the locker.</p></details>
+
+    <details><summary>TV</summary><p>In the living room with cable connection.</p></details>
+
+    <details><summary>Guest Survey</summary><p>Helps us identify issues. "Staff" on booking.com refers to our communication with you.</p></details>
+
+    <details><summary>Carbon Monoxide Detector</summary><p>If it goes off: leave the apartment immediately!</p></details>
+
+    <details><summary>Kitchen</summary><p>Fully equipped. Dishwasher tabs are under the sink. Please return dishes clean before departure.</p></details>
+
+    <details><summary>Waste Disposal</summary><p>Separate paper, plastic, glass, and residual waste. Bins are in the kitchen, containers in the courtyard.</p></details>
+
+    <details><summary>Speakers</summary><p>Bluetooth speaker in the bathroom or controllable via ALEXA.</p></details>
+
+    <details><summary>Parking</summary><p>Garage in the courtyard (first on the left). No outside parking in the courtyard. Alternatively: street parking with ticket (6€/day).</p></details>
+
+    <details><summary>Smoking</summary><p>Only allowed outside. Not at the entrance. Thank you!</p></details>
+
+    <details><summary>Smoke Detectors</summary><p>In all rooms. Fire extinguisher in the hallway next to the locker.</p></details>
+
+    <details><summary>Cleaning</summary><p>Vacuum cleaner and supplies are in the locker.</p></details>
+
+    <details><summary>Sofa Bed</summary><p>Electrically extendable. Switch on the right armrest. Bedding is in the bedroom.</p></details>
+
+    <details><summary>Bedroom</summary><p>Beds are made. Removing linens is optional.</p></details>
+
+    <details><summary>Key</summary><p>In the key safe at the first garage. If lost: lock system must be replaced.</p></details>
+
+    <details><summary>Games Collection</summary><p>In the living room cabinet or coffee table (suitcase).</p></details>
+
+    <details><summary>Fans</summary><p>Ceiling fans and additional mist fans in summer (with instructions).</p></details>
+
+    <details><summary>Washing Machine & Dryer</summary><p>In the basement on the right. Socket is secured, key is at the coat rack. Instructions are provided.</p></details>
+
+    <details><summary>Valuables</summary><p>No liability assumed by the host.</p></details>
+
+    <details><summary>Wi-Fi</summary><p><strong>Network:</strong> domusmerian<br><strong>Password:</strong> onemoretattoo66</p></details>
+
+    <details><summary>Payment Methods</summary><p>PayPal or bank transfer.</p></details>
+
+    <details><summary>Mid-Stay Cleaning</summary><p>Available for stays of 3 weeks or more – includes fresh linens on request.</p></details>
+  </main>
+
+  <footer>
+    <div class="bottom-bar">
+      <a href="imprint.html">Imprint</a> | 
+      <a href="privacy.html">Privacy</a>
+    </div>
+  </footer>
+  </div>
+</body>
+</html>

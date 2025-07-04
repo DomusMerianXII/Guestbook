@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About Us – XII</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      font-family: 'Roboto', sans-serif;
+      background: #f5f5f5;
+    }
+
+    main {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      height: calc(100vh - 7.5rem);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .portfolio-section {
+      width: 100vw;
+      height: 58vh;
+      flex-shrink: 0;
+    }
+
+    .image-wrapper {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .image-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 0%;
+      display: block;
+    }
+
+    .content-scroll {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1rem 3rem 3rem 3rem;
+      background: #f5f5f5;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="top-bar">
+      <div class="left-controls">
+        <img src="https://cdn-icons-png.flaticon.com/128/271/271220.png" alt="Back" class="back-icon" onclick="history.back()" />
+      </div>
+      <div class="right-controls">
+        <a href="contact.html" class="kontakt-button">Contact</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="portfolio-section">
+      <div class="image-wrapper">
+        <img src="images/Rom.jpeg" alt="Photo of Marion" />
+      </div>
+    </section>
+    <div class="content-scroll">
+      <strong><h1>About Us</h1></strong>
+      <p>As a travel-loving family, we enjoy discovering new places – especially those with character.  
+That's why we designed our holiday apartment the way we would like to stay ourselves: a mix of old and new, with attention to detail and an eye for the unique.  
+We want every guest to feel at home with us.
+
+Of course, it's not everyone's style. But we believe you can feel how much heart we've put into this home away from home.
+
+It’s important to us that our guests feel welcome – like visiting friends. That they find peace, feel inspired, and leave with beautiful memories.
+
+When we're not hosting, we like to explore the region, discover new cafés, walking trails or favorite spots we’re happy to share.
+
+Domus Merian XII is not a standardized apartment. It’s our small passion project – personal, cozy, and maybe a little different.
+</p>
+<div style="display: flex; justify-content: center; gap: 2rem; margin-top: 3rem;">
+  <a href="https://domusmerian.smoobu.net/de/" target="_blank" rel="noopener noreferrer">
+    <img src="images/smoobu.png" alt="Smoobu" style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover;">
+  </a>
+  <a href="https://www.instagram.com/domusmerian/" target="_blank" rel="noopener noreferrer">
+    <img src="https://cdn-icons-png.flaticon.com/128/2111/2111463.png" alt="Instagram" style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover;">
+  </a>
+  <a href="https://www.facebook.com/FerienwohnungTrierDomusMerianXII" target="_blank" rel="noopener noreferrer">
+    <img src="https://cdn-icons-png.flaticon.com/128/733/733547.png" alt="Facebook" style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover;">
+  </a>
+</div>
+  </main>
+
+  <footer class="bottom-bar">
+    <a href="imprint.html">Imprint</a> | 
+    <a href="privacy.html">Privacy</a>
+  </footer>
+</body>
+</html>

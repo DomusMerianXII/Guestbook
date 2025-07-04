@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Gästebuch – XII</title>
+  <link rel="stylesheet" href="style.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+<style>
+
+  /* Canvas Container - flex-grow fills remaining space */
+  #canvas-container {
+    flex-grow: 1;
+    box-sizing: border-box;
+  position: relative;
+}
+
+#canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.tool-buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  z-index: 10;
+}
+
+.tool-button {
+  width: 2rem;
+  height: 2rem;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;  /* Icon in Button vertikal und horizontal zentrieren */
+}
+
+.tool-button img {
+  max-width: 80%;
+  max-height: 80%;
+  object-fit: contain;
+  user-select: none;
+}
+
+  .tool-button.selected {
+    outline: 0.2rem solid #ABA19B;
+    border-radius: 0.2rem;
+  }
+
+  .tool-button img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    user-select: none;
+  }
+
+  .action-button {
+    cursor: pointer;
+    font-size: 1.25rem;
+    padding: 0.1rem 1rem;
+    border-radius: 0.2rem;
+    border: 2px solid #ABA19B;
+    background: white;
+    font-weight: 600;
+    transition: background 0.3s, color 0.3s;
+  }
+
+
+  html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .page-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+
+  main {
+    flex-grow: 1;
+  }
+</style>
+</head>
+<body>
+
+  <header>
+    <div class="top-bar">
+  <div class="left-controls">
+    <img src="https://cdn-icons-png.flaticon.com/128/271/271220.png" alt="Zurück" class="back-icon" onclick="history.back()" />
+  </div>
+      <div class="right-controls">
+        <a href="kontakt.html" class="kontakt-button">Kontakt</a>
+      </div>
+    </div>
+  </header>
+
+  <main style="flex-grow: 1; display: flex; flex-direction: column;">
+    <div class="tool-buttons" role="toolbar" aria-label="Werkzeuge" style="flex-direction: column; align-items: flex-start; top: 5rem; left: 1rem; right: auto; height: auto;">
+      <button class="tool-button" onclick="window.location.href='galerie.html'" title="Zur Galerie">
+        <img src="https://cdn-icons-png.flaticon.com/128/7888/7888787.png" alt="Galerie Icon" />
+      </button>
+      <button id="penBtn" class="tool-button selected" aria-pressed="true" title="Stift (zeichnen)">
+        <img src="https://cdn-icons-png.flaticon.com/128/1250/1250615.png" alt="Stift Icon" />
+      </button>
+      <button id="eraserBtn" class="tool-button" aria-pressed="false" title="Radiergummi">
+        <img src="https://cdn-icons-png.flaticon.com/128/171/171383.png" alt="Radiergummi Icon" />
+      </button>
+      <button id="saveBtn" class="tool-button" title="Speichern">
+        <img src="https://cdn-icons-png.flaticon.com/128/2874/2874091.png" alt="Speichern Icon" />
+      </button>
+      <button id="clearBtn" class="tool-button" title="Alles löschen">
+        <img src="https://cdn-icons-png.flaticon.com/128/484/484662.png" alt="Löschen Icon" />
+      </button>
+    </div>
+
+    <div id="canvas-container">
+      <canvas id="canvas"></canvas>
+    </div>
+  </main>
+
+  <footer class="bottom-bar">
+    <a href="impressum.html">Impressum</a> | 
+    <a href="datenschutz.html">Datenschutz</a>
+  </footer>
+  </div>
+
+<script>
+  const canvas = document.getElementById('canvas');
+  const ctx = canvas.getContext('2d');
+
+  // Setze Canvas Größe an Container an (responsive)
+  function resizeCanvas() {
+    const container = document.getElementById('canvas-container');
+    canvas.width = container.clientWidth;
+    canvas.height = container.clientHeight;
+  }
+  window.addEventListener('resize', resizeCanvas);
+  resizeCanvas();
+
+  // Zeichnen Variablen
+  let drawing = false;
+  let currentTool = 'pen';
+
+  // Setze Anfangswerte für Stift und Radiergummi
+  const penColor = '#000000';
+  const penWidth = 4;
+  const eraserWidth = 20;
+
+  // Hilfsfunktion zur Position relativ zum Canvas
+  function getPointerPos(evt) {
+    const rect = canvas.getBoundingClientRect();
+    let x, y;
+    if (evt.touches) {
+      x = evt.touches[0].clientX - rect.left;
+      y = evt.touches[0].clientY - rect.top;
+    } else {
+      x = evt.clientX - rect.left;
+      y = evt.clientY - rect.top;
+    }
+    return { x, y };
+  }
+
+  function startDrawing(evt) {
+    evt.preventDefault();
+    drawing = true;
+    const pos = getPointerPos(evt);
+    ctx.beginPath();
+    ctx.moveTo(pos.x, pos.y);
+  }
+
+  function draw(evt) {
+    if (!drawing) return;
+    evt.preventDefault();
+    const pos = getPointerPos(evt);
+
+    if (currentTool === 'pen') {
+      ctx.strokeStyle = penColor;
+      ctx.lineWidth = penWidth;
+      ctx.lineCap = 'round';
+
+      ctx.lineTo(pos.x, pos.y);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(pos.x, pos.y);
+    } else if (currentTool === 'eraser') {
+      ctx.clearRect(pos.x - eraserWidth / 2, pos.y - eraserWidth / 2, eraserWidth, eraserWidth);
+    }
+  }
+
+  function stopDrawing(evt) {
+    evt.preventDefault();
+    drawing = false;
+    ctx.beginPath();
+  }
+
+  // Event Listener Canvas
+  canvas.addEventListener('mousedown', startDrawing);
+  canvas.addEventListener('mousemove', draw);
+  canvas.addEventListener('mouseup', stopDrawing);
+  canvas.addEventListener('mouseout', stopDrawing);
+
+  canvas.addEventListener('touchstart', startDrawing);
+  canvas.addEventListener('touchmove', draw);
+  canvas.addEventListener('touchend', stopDrawing);
+  canvas.addEventListener('touchcancel', stopDrawing);
+
+  // Buttons Stift / Radiergummi
+  const penBtn = document.getElementById('penBtn');
+  const eraserBtn = document.getElementById('eraserBtn');
+
+  penBtn.addEventListener('click', () => {
+    currentTool = 'pen';
+    penBtn.classList.add('selected');
+    penBtn.setAttribute('aria-pressed', 'true');
+    eraserBtn.classList.remove('selected');
+    eraserBtn.setAttribute('aria-pressed', 'false');
+  });
+
+  eraserBtn.addEventListener('click', () => {
+    currentTool = 'eraser';
+    eraserBtn.classList.add('selected');
+    eraserBtn.setAttribute('aria-pressed', 'true');
+    penBtn.classList.remove('selected');
+    penBtn.setAttribute('aria-pressed', 'false');
+  });
+
+  // Button Alles löschen
+  document.getElementById('clearBtn').addEventListener('click', () => {
+    if(confirm('Alles löschen?')) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+  });
+
+  // Button Speichern - in localStorage speichern als PNG DataURL
+  document.getElementById('saveBtn').addEventListener('click', () => {
+    // Prüfe, ob das Canvas leer ist (weißer Hintergrund)
+    const emptyCanvas = isCanvasBlank(canvas);
+    if (emptyCanvas) {
+      alert('Dein Eintrag ist leer.');
+      return;
+    }
+
+    const dataURL = canvas.toDataURL('image/png');
+
+    let entries = JSON.parse(localStorage.getItem('gaestebuchEntries') || '[]');
+    entries.push(dataURL);
+    localStorage.setItem('gaestebuchEntries', JSON.stringify(entries));
+
+    alert('Eintrag gespeichert! Du kannst ihn in der Galerie ansehen.');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  });
+
+  // Hilfsfunktion: Prüfen ob Canvas leer (nur weiße Fläche)
+  function isCanvasBlank(cnv) {
+    const blank = document.createElement('canvas');
+    blank.width = cnv.width;
+    blank.height = cnv.height;
+    const blankCtx = blank.getContext('2d');
+    blankCtx.fillStyle = '#FFFFFF';
+    blankCtx.fillRect(0, 0, blank.width, blank.height);
+    return cnv.toDataURL() === blank.toDataURL();
+  }
+</script>
+
+</body>
+</html>
