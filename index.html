@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gästeinformation - XII</title>
+  <link rel="stylesheet" href="style.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);  /* 2 columns */
+  grid-template-rows: repeat(3, 1fr);     /* 3 rows */
+  gap: 2rem;
+  width: 100%;
+  height: 100%;
+  padding: 2rem;
+  box-sizing: border-box;
+}
+
+.tile {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.tile-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  text-align: center;
+  font-weight: bold;
+  padding: 1rem;
+  transition: background 0.3s ease;
+}
+
+.tile:hover .tile-overlay {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+/* Optional: Backgrounds per tile (add these if needed) */
+.tile:nth-child(1) { background-image: url('images/Empfang.jpg'); }
+.tile:nth-child(2) { background-image: url('images/Gerrömeranen.jpg'); }
+.tile:nth-child(3) { background-image: url('images/Reklame.jpeg'); }
+.tile:nth-child(4) { background-image: url('images/Wir.JPG'); }
+.tile:nth-child(5) { background-image: url('images/Karte.jpg'); }
+.tile:nth-child(6) { background-image: url('images/Schloss.jpeg'); }
+
+.image-tile {
+  background-size: cover;
+  background-position: center;
+  border-radius: 1rem;
+  overflow: hidden;
+  padding: 0;
+  display: block;
+}
+
+.image-tile:hover .tile-overlay {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.tile.tile1 {
+  background-position: center 80%; /* Bild weiter oben */
+}
+.tile.tile3 {
+  background-position: center 100%; /* Bild weiter oben */
+}
+.tile.tile4 {
+  background-position: center 8%; /* Bild weiter oben */
+}
+  </style>
+
+</head>
+<body>
+  <header>
+    <div class="top-bar">
+      <div class="left-controls">
+        <a href="index.html" class="logo">XII</a>
+      </div>
+      <div class="right-controls" style="display:flex; align-items:center; gap:0.75rem;">
+  <select id="language-selector" aria-label="Sprache wählen" style="
+    font-family: 'Roboto Slab', serif;
+    font-size: 1rem;
+    border-radius: 999px;
+    border: 1px solid #ccc;
+    padding: 0.2rem 0.4rem;
+    cursor: pointer;
+    background: white;
+    color: #222;
+    height: 2.5rem;
+    ">
+    <option value="de" selected>DE</option>
+    <option value="en">EN</option>
+  </select>
+  <a href="kontakt.html" class="kontakt-button" style="white-space: nowrap;">Kontakt</a>
+</div>
+    </div>
+  </header>
+
+  <main>
+    <div class="grid-container">
+      <div class="tile tile1 image-tile" onclick="location.href='willkommen.html'">
+        <div class="tile-overlay">Herzlich Willkommen!</div>
+      </div>
+      <div class="tile tile2 image-tile" onclick="location.href='wissenswertes.html'">
+        <div class="tile-overlay">Wissenswertes</div>
+      </div>
+      <div class="tile tile3 image-tile" onclick="location.href='tipps.html'">
+        <div class="tile-overlay">Tipps</div>
+      </div>
+      <div class="tile tile4 image-tile" onclick="location.href='ueberuns.html'">
+        <div class="tile-overlay">Über Uns</div>
+      </div>
+      <div class="tile tile5 image-tile" onclick="location.href='karte.html'">
+        <div class="tile-overlay">Karte</div>
+      </div>
+      <div class="tile tile6 image-tile" onclick="location.href='gaestebuch.html'">
+        <div class="tile-overlay">Gästebuch</div>
+      </div>
+    </div>
+  </main>
+  <script>
+  document.getElementById('language-selector').addEventListener('change', function() {
+    const lang = this.value;
+    if (lang === 'en') {
+      window.location.href = 'indexen.html';
+    } else {
+      window.location.href = 'indexde.html';
+    }
+  });
+  </script>
+  <footer>
+    <div class="bottom-bar">
+      <a href="impressum.html">Impressum</a> | <a href="datenschutz.html">Datenschutz</a>
+    </div>
+  </footer>
+</body>
+</html>
