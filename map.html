@@ -215,88 +215,33 @@
       let query = '';
 
       if (type === 'favorites') {
-        favoritePlaces.forEach(place => {
+        const currentHash = window.location.hash.substring(1);
+        const filtered = currentHash
+          ? favoritePlaces.filter(p => p.link.includes(`#${currentHash}`))
+          : favoritePlaces;
+
+        filtered.forEach(place => {
           const lat = place.coords[0];
           const lon = place.coords[1];
           const icon = icons.favorites;
 
+          const popupContent = `
+            <div style="background:white; padding:1rem; border-radius:1rem;">
+              <a href="${place.website || place.link}" target="_blank" rel="noopener noreferrer"><strong>${place.name}</strong></a><br>
+              ${place.description}
+            </div>
+          `;
+
           const marker = L.marker([lat, lon], { icon }).addTo(markersLayer);
+          marker.bindPopup(popupContent);
 
-          marker.on('click', () => {
-            const apiKey = '5b3ce3597851110001cf6248fde69deb954c4272bbc78f378033bdff';
-            if (routeControl) {
-              map.removeControl(routeControl);
-              routeControl = null;
-            }
-
-            marker.bindPopup('<div style="background:white; padding:1rem; border-radius:1rem;">Calculating route...</div>').openPopup();
-
-            const start = [LOCATION[1], LOCATION[0]];
-            const end = [lon, lat];
-
-            const profiles = [
-              { key: 'foot-walking', label: 'On foot' },
-              { key: 'cycling-regular', label: 'By bike' },
-              { key: 'driving-car', label: 'By car' }
-            ];
-
-            Promise.all(profiles.map(profile => {
-              return fetch(`https://api.openrouteservice.org/v2/directions/${profile.key}/geojson`, {
-                method: 'POST',
-                headers: {
-                  'Authorization': apiKey,
-                  'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ coordinates: [start, end] })
-              })
-                .then(res => res.ok ? res.json() : Promise.reject(`Status ${res.status}`))
-                .then(routeData => ({
-                  label: profile.label,
-                  mins: Math.round(routeData.features[0].properties.summary.duration / 60),
-                  geojson: routeData
-                }))
-                .catch(() => ({ label: profile.label, mins: null, geojson: null }));
-            }))
-              .then(results => {
-                const validResults = results.filter(r => r.mins !== null);
-
-                if (validResults.length === 0) {
-                  marker.setPopupContent(`
-                    <div style="background:white; padding:1rem; border-radius:1rem;">
-                      <a href="${place.website || place.link}" target="_blank" rel="noopener noreferrer"><strong>${place.name}</strong></a><br>
-                      ${place.description}<br>
-                      ${results.map(r => `<em>⏱ ${r.label}: ${r.mins !== null ? r.mins + ' Min' : '-'}</em>`).join('<br>')}
-                    </div>
-                  `);
-                  marker.openPopup();
-                  return;
-                }
-
-                const fastest = validResults.reduce((a, b) => a.mins < b.mins ? a : b);
-
-                routeControl = L.geoJSON(fastest.geojson, {
-                  style: { color: 'blue', weight: 5 }
-                }).addTo(map);
-
-                marker.setPopupContent(`
-                  <div style="background:white; padding:1rem; border-radius:1rem;">
-                    <a href="${place.website || place.link}" target="_blank" rel="noopener noreferrer"><strong>${place.name}</strong></a><br>
-                    ${place.description}<br>
-                    ${results.map(r => `<em>⏱ ${r.label}: ${r.mins !== null ? r.mins + ' Min' : '-'}</em>`).join('<br>')}
-                  </div>
-                `);
-                marker.openPopup();
-              })
-              .catch(() => {
-                marker.setPopupContent(`<div style="background:white; padding:1rem; border-radius:1rem;">
-                  <strong>${place.name}</strong><br>
-                  There was an error calculating the route.
-                </div>`);
-                marker.openPopup();
-              });
-          });
+          if (currentHash && place.link.includes(`#${currentHash}`)) {
+            map.setView([lat, lon], 17);
+            marker.openPopup();
+          }
         });
-        return; // Important! Skip Overpass query for favorites
+
+        return;
       }
 
       // Overpass queries for other types
@@ -516,26 +461,10 @@
 
     // Handle URL hash to open favorite place popup
     const hash = window.location.hash.substring(1);
-
     if (hash) {
       const selector = document.getElementById('place-selector');
       selector.value = 'favorites';
       fetchPlaces('favorites');
-
-      setTimeout(() => {
-        const place = favoritePlaces.find(p => p.link.includes(`#${hash}`));
-        if (place) {
-          map.setView(place.coords, 17);
-          markersLayer.eachLayer(marker => {
-            if (
-              marker.getLatLng().lat === place.coords[0] &&
-              marker.getLatLng().lng === place.coords[1]
-            ) {
-              marker.openPopup();
-            }
-          });
-        }
-      }, 500);
     }
 
     const selector = document.getElementById('place-selector');
