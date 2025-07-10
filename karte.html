@@ -209,6 +209,10 @@
     ];
 
     function fetchPlaces(type) {
+      if (routeControl) {
+        map.removeControl(routeControl);
+        routeControl = null;
+      }
       markersLayer.clearLayers();
 
       const bbox = [49.74, 6.60, 49.80, 6.70];
@@ -526,20 +530,64 @@
         const place = favoritePlaces.find(p => p.link.includes(`#${hash}`));
         if (place) {
           map.setView(place.coords, 17);
-          markersLayer.eachLayer(marker => {
-            if (
-              marker.getLatLng().lat === place.coords[0] &&
-              marker.getLatLng().lng === place.coords[1]
-            ) {
-              marker.openPopup();
-            }
-          });
+          const marker = L.marker(place.coords, { icon: icons.favorites }).addTo(markersLayer);
+
+          const apiKey = '5b3ce3597851110001cf6248fde69deb954c4272bbc78f378033bdff';
+          const start = [LOCATION[1], LOCATION[0]];
+          const end = [place.coords[1], place.coords[0]];
+          const profiles = [
+            { key: 'foot-walking', label: 'Zu Fuß' },
+            { key: 'cycling-regular', label: 'Mit dem Rad' },
+            { key: 'driving-car', label: 'Mit dem Auto' }
+          ];
+
+          Promise.all(profiles.map(profile => {
+            return fetch(`https://api.openrouteservice.org/v2/directions/${profile.key}/geojson`, {
+              method: 'POST',
+              headers: {
+                'Authorization': apiKey,
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({ coordinates: [start, end] })
+            })
+              .then(res => res.ok ? res.json() : Promise.reject(`Status ${res.status}`))
+              .then(routeData => ({
+                label: profile.label,
+                mins: Math.round(routeData.features[0].properties.summary.duration / 60),
+                geojson: routeData
+              }))
+              .catch(() => ({ label: profile.label, mins: null, geojson: null }));
+          }))
+            .then(results => {
+              const validResults = results.filter(r => r.mins !== null);
+              if (validResults.length === 0) return;
+
+              const fastest = validResults.reduce((a, b) => a.mins < b.mins ? a : b);
+
+              if (routeControl) {
+                map.removeControl(routeControl);
+                routeControl = null;
+              }
+
+              routeControl = L.geoJSON(fastest.geojson, {
+                style: { color: 'blue', weight: 5 }
+              }).addTo(map);
+
+              marker.bindPopup(`
+                <div style="background:white; padding:1rem; border-radius:1rem;">
+                  <a href="${place.website || place.link}" target="_blank" rel="noopener noreferrer"><strong>${place.name}</strong></a><br>
+                  ${place.description}<br>
+                  ${results.map(r => `<em>⏱ ${r.label}: ${r.mins !== null ? r.mins + ' Min' : '-'}</em>`).join('<br>')}
+                </div>
+              `).openPopup();
+            });
         }
       }, 500);
     }
 
     const selector = document.getElementById('place-selector');
     selector.addEventListener('change', () => {
+      window.location.hash = '';
       if (routeControl) {
         map.removeControl(routeControl);
         routeControl = null;
