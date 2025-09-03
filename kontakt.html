@@ -185,7 +185,7 @@ main {
 
   <main>
     <h1>Kontakt & Feedback</h1>
-    <form action="mailto:domusmerian@icloud.com" method="POST" enctype="text/plain">
+    <form id="feedbackForm" action="https://formspree.io/f/movnpqar" method="POST" novalidate>
       <label>Wie zufrieden warst Du mit unserem Service?</label>
       <div class="radio-group">
         <label><input type="radio" name="service" value="sehr zufrieden" required /> sehr zufrieden</label>
@@ -210,7 +210,16 @@ main {
       <label for="feedback-wunsch">Wünsche oder Anregungen</label>
       <textarea id="feedback-wunsch" name="wunsch" placeholder="Deine Wünsche oder Anregungen"></textarea>
 
+      <!-- Optional Kontaktfeld, falls Rückmeldung gewünscht ist -->
+      <label for="kontaktEmail">E-Mail (optional, für Rückmeldung)</label>
+      <input type="email" id="kontaktEmail" name="email" placeholder="deine@mail.de" />
+
+      <!-- Honeypot gegen Spam -->
+      <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" style="position:absolute;left:-10000px;opacity:0;" />
+
+      <input type="hidden" name="subject" value="Neues Feedback von Domus Merian XII">
       <button type="submit">Absenden</button>
+      <p id="form-status" aria-live="polite" style="margin:0.5rem 0 0; font-size: 1rem;"></p>
     </form>
   </main>
 
@@ -219,5 +228,45 @@ main {
     <a href="datenschutz.html"> Datenschutz</a>
   </footer>
 
+  <script>
+    (function(){
+      const form = document.getElementById('feedbackForm');
+      const statusEl = document.getElementById('form-status');
+
+      function setStatus(msg, ok){
+        statusEl.textContent = msg;
+        statusEl.style.color = ok ? 'green' : 'crimson';
+      }
+
+      form.addEventListener('submit', async function(e){
+        e.preventDefault();
+        setStatus('Sende …', true);
+
+        // If honeypot was filled, silently abort
+        const honeypot = form.querySelector('input[name="_gotcha"]');
+        if (honeypot && honeypot.value) { return; }
+
+        try {
+          const formData = new FormData(form);
+          const resp = await fetch(form.action, {
+            method: 'POST',
+            headers: { 'Accept': 'application/json' },
+            body: formData
+          });
+
+          if (resp.ok) {
+            setStatus('Danke! Deine Nachricht wurde gesendet.', true);
+            form.reset();
+          } else {
+            const data = await resp.json().catch(()=>({}));
+            const msg = (data && data.errors && data.errors[0] && data.errors[0].message) || 'Senden fehlgeschlagen. Bitte später erneut versuchen oder per E-Mail an domusmerian@icloud.com.';
+            setStatus(msg, false);
+          }
+        } catch(err){
+          setStatus('Netzwerkfehler – bitte später erneut versuchen.', false);
+        }
+      });
+    })();
+  </script>
 </body>
 </html>
