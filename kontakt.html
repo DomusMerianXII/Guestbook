@@ -15,27 +15,29 @@
 *::after {
   box-sizing: border-box;
 }
-main {
-  position: fixed;
-  left: 0;
-  right: 0;
-  padding: 4rem 2rem; 
-  font-size: 1.2rem;
-  line-height: 1.6;
-  display: flex;
-  flex-direction: column;
-  gap: 3rem;
-  box-sizing: border-box;
-}
     body {
       display: flex;
       flex-direction: column;
-      height: 100vh;
-      overflow: hidden;
+      min-height: 100vh;
+      overflow-y: auto; /* allow scrolling */
       font-family: 'Roboto', sans-serif;
       color: #222;
       margin: 0;
+      background: #fff;
     }
+main {
+  position: relative;
+  width: 100%;
+  max-width: 920px;       /* readable line length on desktop */
+  margin: 80px auto 56px; /* leave room for fixed top & bottom bars */
+  padding: 0 1rem; 
+  font-size: 1.1rem;
+  line-height: 1.6;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  box-sizing: border-box;
+}
 
 
 .search-icon {
@@ -54,30 +56,38 @@ main {
   bottom: 0;
   left: 0;
   right: 0;
-  height: 2rem; /* or your desired height */
-  font-size: 1rem;
+  min-height: 40px;
+  font-size: 0.95rem;
   background: #000;
-  color: white;
+  color: #fff;
   display: flex;
+  gap: .5rem;
   justify-content: center;
   align-items: center;
-  z-index: 1000; /* stays on top */
+  padding: .25rem .75rem;
+  z-index: 1000;
 }
+.bottom-bar a { color: #fff; text-decoration: none; }
+.bottom-bar a:hover { text-decoration: underline; }
 .top-bar {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
+  right: 0;
+  height: 64px;
   z-index: 1000;
   background-color: #ABA19B;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding-top: 1.4rem;
-  padding-bottom: 1.4rem;
-  padding-left: 1rem;
-  padding-right: 1rem;
+  justify-content: flex-start;
+  padding: 0 1rem;
   box-sizing: border-box;
+}
+.back-icon {
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
+  filter: brightness(0); /* ensure visible on beige */
 }
 
     p.intro {
@@ -123,8 +133,9 @@ main {
 
     .radio-group {
       display: flex;
-      gap: 1.5rem;
-      margin-bottom: 1rem;
+      flex-wrap: wrap;
+      gap: 1rem 1.25rem;
+      margin-bottom: .5rem;
     }
     .radio-group label {
       font-weight: normal;
@@ -270,3 +281,10 @@ main {
   </script>
 </body>
 </html>
+  @media (max-width: 600px) {
+    main { margin: 72px auto 52px; font-size: 1rem; }
+    form { padding: .75rem; }
+    label { font-size: 1rem; }
+    input[type="text"], input[type="email"], textarea { font-size: 1rem; }
+    button[type="submit"] { font-size: 1.05rem; padding: .65rem 1.25rem; }
+  }
